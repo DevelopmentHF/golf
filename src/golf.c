@@ -11,6 +11,9 @@ int main(void) {
     // Init screen dimensions
     int screenWidth = 800;
     int screenHeight = 450;
+
+    // Init ball
+    Vector2 ballPosition = { (float)screenWidth/2, (float)screenHeight/2 };
     
     // Actually make the window in raylib
     InitWindow(screenWidth, screenHeight, "golf");
@@ -26,8 +29,10 @@ int main(void) {
         BeginDrawing();
 
             ClearBackground(RAYWHITE);
-            DrawText("golf", 190, 200, 20, LIGHTGRAY);
+            DrawText("golf", 10, 10, 20, DARKGRAY);
 
+            DrawCircleV(ballPosition, 50, BLUE);
+            
         EndDrawing();
     }
     // =========================================================================
