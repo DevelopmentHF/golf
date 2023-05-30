@@ -18,7 +18,7 @@ int main(void) {
     // Init ball
     Vector2 ballPosition = { (float)screenWidth/2, (float)screenHeight/2 };
     Color ballColour = DARKGRAY;
-    int speeed = 0;
+    int speed = 0;
 
     // Init mouse tracking vars
     Vector2 mouseStartPosition;
@@ -36,23 +36,32 @@ int main(void) {
     while(!WindowShouldClose()) {
         // Updates
         
-        // begin drawing line control
-        if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
-            mouseStartPosition = GetMousePosition();
-            clicked = !clicked;
-        } else {
-            mouseCurrentPosition = GetMousePosition();
-        }
-        
         // calculate distance of the line
         drawnLineDistance = Vector2Distance(mouseStartPosition, 
                                              mouseCurrentPosition);
 
         // for ball physics, get magnitude of line vector and multiply this by
+        // begin drawing line control
+        if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
+            mouseStartPosition = GetMousePosition();
+            speed = drawnLineDistance * 0.1;
+            clicked = !clicked;
+        } else {
+            mouseCurrentPosition = GetMousePosition();
+        }
+        
         // a scaling factor to get an initial velocity for the ball
         // then for each subsequent frame decrease the velocity
         // velocity applied to the ball should be in the opposite direction to 
         // line vector
+        //
+
+        if (clicked == FALSE && speed > 0) {
+            ballPosition.x += speed;
+            speed -= 5;    
+        } else {
+            speed = 0;
+        }
 
         // Drawing
         BeginDrawing();
