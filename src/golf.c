@@ -1,5 +1,7 @@
 #include "../lib/raylib.h"
 #include "../lib/raymath.h"
+#include <stdio.h>
+
 
 #define FPS (60)
 #define TRUE (1)
@@ -16,12 +18,14 @@ int main(void) {
     // Init ball
     Vector2 ballPosition = { (float)screenWidth/2, (float)screenHeight/2 };
     Color ballColour = DARKGRAY;
+    int speeed = 0;
 
     // Init mouse tracking vars
     Vector2 mouseStartPosition;
     Vector2 mouseCurrentPosition;
-    int clickingFlag = FALSE;
-
+    int clicked = FALSE;
+    int drawnLineDistance = 0;
+    
     // Actually make the window in raylib
     InitWindow(screenWidth, screenHeight, "golf");
     SetTargetFPS(FPS);
@@ -35,10 +39,14 @@ int main(void) {
         // begin drawing line control
         if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
             mouseStartPosition = GetMousePosition();
-            clickingFlag = !clickingFlag;
+            clicked = !clicked;
         } else {
             mouseCurrentPosition = GetMousePosition();
         }
+        
+        // calculate distance of the line
+        drawnLineDistance = Vector2Distance(mouseStartPosition, 
+                                             mouseCurrentPosition);
 
         // for ball physics, get magnitude of line vector and multiply this by
         // a scaling factor to get an initial velocity for the ball
@@ -54,10 +62,12 @@ int main(void) {
 
             DrawCircleV(ballPosition, 50, ballColour);
             
-            if (clickingFlag == TRUE) {
+            if (clicked == TRUE) {
+                // draw the line from initial click point to end mouse point
                 DrawLine(mouseStartPosition.x, mouseStartPosition.y,
                         mouseCurrentPosition.x, mouseCurrentPosition.y, BLACK);
-
+                DrawText(TextFormat("Line Distance: %d", drawnLineDistance),
+                            10, 30, 20, DARKGRAY);
             }
 
         EndDrawing();
